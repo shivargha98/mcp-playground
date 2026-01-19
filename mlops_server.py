@@ -14,6 +14,7 @@ import datetime
 import requests
 import pymongo
 import json
+import uuid
 
 ###DIRECTORIES###
 DIR = 'D:/mcp-playground/projectdata/'
@@ -102,8 +103,57 @@ def save_initial_critique(
 Purpose:
 Takes the files -> MongoDB updates -> Analysis of the critique with Gemini -> MongoDB update
 '''
+@mcp.tool()
+def start_llm_council_reflection() -> str:
 
+    '''
+    Triggers an Airflow DAG which is an llm council reflecting on the analyst review
+    :rtype: str
+    '''
 
+    try:
+        base_url = 'http://localhost:8080'
+        dag_id = 'council_review_workflow'
+
+        ## get authentication payload ##
+        auth_payload = {"username":"airflow","password":"airflow"}
+        token_response = requests.post(f"{base_url}/auth/token",json=auth_payload)
+
+        if token_response.status_code !=201:
+            return f"Failed Authentication"
+        access_token = token_response.json().get("access_token")
+        
+        #### Creating an unique id for the dag ###
+        unique_id_dag = f"run_{uuid.uuid4().hex[:8]}"
+        current_time = datetime.datetime.now(datetime.timezone.utc)
+        future_time = current_time + datetime.timedelta(seconds=35)
+        clean_timestamp = future_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        ## payload needs to have -> dag id, logical date ##
+        payload_dag_run = {
+            "dag_run_id": unique_id_dag,
+            "logical_date": clean_timestamp,
+            "conf":{}
+        }
+
+        ##DAG url endpoint setup##
+        dag_trigger_url = f"{base_url}/api/v2/dags/{dag_id}/dagRuns"
+        headers = {
+            'Authorization':'Bearer ' + access_token,
+            'Content-Type':'application/json'
+        }
+
+        response = requests.post(dag_trigger_url,
+                                 headers=headers,
+                                 json=payload_dag_run)
+
+        if response.status_code == 200:
+            return f"Pipeline has started executing, RunID : {unique_id_dag}, See Results in MongoDB"
+        else:
+            return f"Error {response.status_code} : {response.text}"
+
+    except Exception as e:
+        return f"Cannot Run Airflow DAG, error : {e}"
 
     
 
