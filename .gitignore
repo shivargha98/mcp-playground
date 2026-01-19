@@ -1,1 +1,5 @@
 projectdata/
+airflow_as_mcp/config
+airflow_as_mcp/logs
+airflow_as_mcp/plugins
+airflow_as_mcp/.env

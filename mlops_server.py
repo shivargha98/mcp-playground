@@ -97,7 +97,11 @@ def save_initial_critique(
         return f"Error saving the file, error : {e}"
     
 
-
+## TOOL4 : Airflow LLM council ###
+'''
+Purpose:
+Takes the files -> MongoDB updates -> Analysis of the critique with Gemini -> MongoDB update
+'''
 
 
 
