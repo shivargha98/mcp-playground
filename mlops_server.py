@@ -126,7 +126,7 @@ def start_llm_council_reflection() -> str:
         #### Creating an unique id for the dag ###
         unique_id_dag = f"run_{uuid.uuid4().hex[:8]}"
         current_time = datetime.datetime.now(datetime.timezone.utc)
-        future_time = current_time + datetime.timedelta(seconds=35)
+        future_time = current_time + datetime.timedelta(seconds=10)
         clean_timestamp = future_time.strftime("%Y-%m-%dT%H:%M:%SZ")
 
         ## payload needs to have -> dag id, logical date ##
