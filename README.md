@@ -1,6 +1,7 @@
 # MCP Playground - MLOps Control Center
 
-An MLOps control center that connects **Claude** (via the Model Context Protocol) with **Apache Airflow** and **Google Gemini** to build an automated, multi-LLM financial analyst review pipeline. Analyst stock reviews are ingested, critiqued by Claude, reflected upon by Gemini, and persisted to MongoDB — all orchestrated through MCP tools and an Airflow DAG.
+An MLOps control center that connects **Claude** (via the Model Context Protocol) with **Apache Airflow** and **Google Gemini** to build an automated, multi-LLM financial analyst review pipeline. Analyst stock reviews are ingested, critiqued by Claude, reflected upon by Gemini, and persisted to MongoDB — all orchestrated through MCP tools and an Airflow DAG API.
+
 
 ---
 
